@@ -1,0 +1,19 @@
+
+
+<!doctype html>
+<html >
+    <meta charset="UTF-8">
+    <head>
+        <title>Фотоархив</title>
+    </head>
+<body>
+    <h1>Фотоархив</h1>
+    <ul>
+        {%for title in titles %}
+            <li><a href="album{{loop.index0}}.html">{{title}}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+
+
+</html>
