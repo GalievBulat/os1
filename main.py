@@ -63,9 +63,9 @@ def delete(album, photo):
         objects = s3.list_objects(Bucket=BUCKET_NAME, Prefix=album, )['Contents']
         for el_obj in objects:
             el = el_obj['Key'].split('/')[-1]
-            s3.delete_object(Bucket=BUCKET_NAME, Key=album + PATH_DELIMITER + el)
+            s3.delete_object(Bucket=BUCKET_NAME, Key=album + '/' + el)
     else:
-        s3.delete_object(Bucket=BUCKET_NAME, Key=album + PATH_DELIMITER + photo)
+        s3.delete_object(Bucket=BUCKET_NAME, Key=album + '/' + photo)
 
 
 def mksite():
@@ -99,10 +99,11 @@ def mksite():
         s3.upload_file(Filename='album' + str(ind) + '.html', Key='album' + str(ind) + '.html', Bucket=BUCKET_NAME)
         ind += 1
     with open('index_tmplt.html', 'r') as html_text:
-        my_templ = jinja2.Template(html_text.read())
-        with open('index.html', 'w') as f2:
-            f2.write(my_templ.render(titles=els))
+            my_templ = jinja2.Template(html_text.read())
+            with open('index.html', 'w') as f2:
+                f2.write(my_templ.render(titles=els))
     s3.upload_file(Filename="index.html", Key="index.html", Bucket=BUCKET_NAME)
+
 
 
 # [DEFAULT]
@@ -182,6 +183,7 @@ if __name__ == '__main__':
         download(args.album, args.path)
     elif command == 'delete':
         delete(args.album, args.photo)
+
     elif command == 'list':
         list(args.album)
     elif command == 'mksite':
